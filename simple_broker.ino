@@ -70,7 +70,7 @@ void setup() {
 
   broker.begin();
   M5.Lcd.println("Broker : " + ipadd1 + ":" + String(PORT));
-
+  M5.Lcd.println("------------------------");
   // My_timer = timerBegin(0, 80, true);
   // timerAttachInterrupt(My_timer, &onTimer, true);
   // timerAlarmWrite(My_timer, 10000, true);
@@ -79,17 +79,38 @@ void setup() {
 }
 
 void loop() {
+
+  M5.update();  // Read the press state of the key.  读取按键 A, B, C 的状态
   broker.loop();
-     
+
+
+  // if (M5.BtnA.wasReleased() || M5.BtnA.pressedFor(1000, 200)) {
+  //     M5.Lcd.print('A');
+  // } else 
   if (M5.BtnB.wasReleased() || M5.BtnB.pressedFor(1000, 200)) {
-    // M5.Lcd.print("B");
+      M5.Lcd.print('B');
+      broker.publish("/esp32_C3_kickass_lights_state","0",1);
+  } else if (M5.BtnC.wasReleased() || M5.BtnC.pressedFor(1000, 200)) {
+      M5.Lcd.print('C');
+      // broker.publish("/esp32_C3_kickass_lights_state","1");
+  } else if (M5.BtnB.wasReleasefor(700)) {
+      M5.Lcd.clear(WHITE);  // Clear the screen and set white to the
+                            // background color.  清空屏幕并将白色设置为底色
+      M5.Lcd.setCursor(0, 0);
+  }
+
+ // broker.publish("//llamaninos","0");
+
+
+  // if (M5.BtnB.wasReleased() || M5.BtnB.pressedFor(1000, 200)) {
+  //   // M5.Lcd.print("B");
 
       
-    } else if(M5.BtnC.wasReleased() || M5.BtnC.pressedFor(1000, 200)) {
+  //   } else if(M5.BtnC.wasReleased() || M5.BtnC.pressedFor(1000, 200)) {
    
-    M5.Lcd.print("c");
+  //   M5.Lcd.print("c");
 
-    broker.publish("//llamaninos","0");
+   
       
     // M5.Lcd.setCursor(5, 100);
     // M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
@@ -98,8 +119,6 @@ void loop() {
     //  M5.Lcd.print(formatTime);
     }
 
-    M5.update();  // Read the press state of the key.  读取按键 A, B, C 的状态
-}
 
 String formatUptime(){
   
